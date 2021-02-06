@@ -1,4 +1,4 @@
-ASL Data Pre-processing
+Dynamic PET Data Pre-processing
 =======================
 
 Introduction
@@ -33,10 +33,10 @@ We use the `flirt <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FLIRT>`_ command to pe
 The registration results are saved in output_pet_reg folder.
 
 
-Create an analysis mask in ASL space
+Create an analysis mask in PET space
 ------------------------------------
 
-Once we have created the registration between the ASL and T1-weighted structural image, we are going to use the brain mask in the structural image space to create an analysis mask in the ASL space.
+Once we have created the registration between the PET and T1-weighted structural image, we are going to use the brain mask in the structural image space to create an analysis mask in the PET space.
 
 First, we use the `convert_xfm <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FLIRT>`_ command to create a transformation from T1-weighted structural to PET space::
 
