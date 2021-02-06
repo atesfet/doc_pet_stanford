@@ -1,10 +1,10 @@
 Dynamic PET Data Pre-processing
-=======================
+===============================
 
 Introduction
 ------------
 
-Our PET data contains signal count at different time points, sufficient for quantifying CBF in absolute units (ml/100g/min). Before we perform quantification, we need to pre-process the data to:
+Our dynamic PET data contains signal count at different time points, sufficient for quantifying CBF in absolute units (ml/100g/min). Before we perform quantification, we need to pre-process the data to:
 
 1 create a registration between the T1-weighted structural and PET space
 
