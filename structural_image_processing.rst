@@ -4,7 +4,7 @@ Structural Image Processing
 Introduction
 ------------
 
-The T1-weighted image allows us to perform registration and group analysis for our ASL data. However, the raw T1-weighted image from the scanner may contain artifacts due to bias field. We can use FSL tools to reduce these impacts and improve the accuracy of image registration and tissue segmentation.
+The T1-weighted image allows us to perform registration and group analysis for our PET data. However, the raw T1-weighted image from the scanner may contain artifacts due to bias field. We can use FSL tools to reduce these impacts and improve the accuracy of image registration and tissue segmentation.
 
 
 Processing the T1-weighted Structural Image
