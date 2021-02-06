@@ -19,7 +19,7 @@ Pre-requisite
 Sample Data
 -----------
 
-We will use a sample dataset of a healthy volunteer collected by a GE 3T MRI system. The dataset includes a T1 weighted structural image and an ASL image acquired using GE's product sequence. This dataset can be downloaded here.
+We will use a sample dataset of a healthy volunteer collected by a GE 3T MRI system. The dataset includes a T1 weighted structural image and an ASL image acquired using GE's PET/MRI system. This dataset can be downloaded here.
 
 
 Content
@@ -28,11 +28,15 @@ Content
 .. toctree::
    :maxdepth: 2
    
+   dynamic_pet_data_reconstruction
+
    data_preparation
 
    structural_image_processing
 
-   asl_pre_processing
+   pet_pre_processing
+
+   aif_quantification
 
    cbf_quantification
 
@@ -42,12 +46,11 @@ References
 
 You may include the following description in your manuscript:
 
-Voxel-wise CBF in absolute units was estimated by fitting the ASL label/control difference data to the general kinetic model using the variational Bayesian inference technque [1, 2]. The artifact on the edge of the brain due to partial volume effects was corrected using the erosion and extrapolatino technique [3].
+An image-derived arterial input function (AIF) was estimated from dynamic PET data in the carotid arteries including corrections for spill-in and out artifacts using the high-resolution segmentation of the cervical MRA and GRE data for masking [1]. This AIF and dynamic PET data were then incorporated into the one-compartment pharmacokinetic model to quantify voxel-wise CBF. The model was implemented in the spatially regularized Variational Bayesian Inference framework in FSL [2].
 
 
- [1]	*Chappell, M.A., Groves, A.R., Whitcher, B., Woolrich, M.W., 2009. Variational Bayesian Inference for a Nonlinear Forward Model. IEEE Trans. Signal Process. 57, 223–236. https://doi.org/10.1109/TSP.2008.2005752*
+ [1]	*Khalighi MM, Deller TW, Fan AP, et al. Image-derived input function estimation on a TOF-enabled PET/MR for cerebral blood flow mapping. Journal of Cerebral Blood Flow & Metabolism. 2018;38(1):126-135. doi:10.1177/0271678X17691784*
 
- [2]	*Groves, A.R., Chappell, M.A., Woolrich, M.W., 2009. Combined spatial and non-spatial prior for inference on MRI time-series. NeuroImage 45, 795–809. https://doi.org/10.1016/j.neuroimage.2008.12.027*
+ [2]	*YOUR NEUROIMAGE REF GOES HERE*
 
- [3]	*Zhao, M.Y., Mezue, M., Segerdahl, A.R., Okell, T.W., Tracey, I., Xiao, Y., Chappell, M.A., 2017. A systematic study of the sensitivity of partial volume correction methods for the quantification of perfusion from pseudo-continuous arterial spin labeling MRI. NeuroImage 162, 384–397. https://doi.org/10.1016/j.neuroimage.2017.08.072*
 
