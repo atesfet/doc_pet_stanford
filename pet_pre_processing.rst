@@ -4,7 +4,7 @@ Dynamic PET Data Pre-processing
 Introduction
 ------------
 
-Our PET data contains signal count at different time points, sufficient for quantifying CBF in absolute units (ml/100g/min). Before we perform quantification, we need to pre-process the data to 
+Our PET data contains signal count at different time points, sufficient for quantifying CBF in absolute units (ml/100g/min). Before we perform quantification, we need to pre-process the data to:
 
 1 create a registration between the T1-weighted structural and PET space
 
@@ -55,6 +55,6 @@ We also slighly erode the mask the cover most of the brain regions in the PET sp
 
 (Revise this part) Now we can visualize the mask on top of the PET data. The blue semitransparent layer is the mask.
 
-.. image:: /images/asl_pre_processing/mask.png
+.. image:: /images/pet_pre_processing/mask.png
 
 
