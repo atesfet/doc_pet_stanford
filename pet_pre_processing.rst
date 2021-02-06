@@ -50,10 +50,12 @@ Now we can use transform the T1-weighted brain image to the PET space::
 
 We also slighly erode the mask the cover most of the brain regions in the PET space::
 
-    fslmaths mask_pet -kernel 2D -ero -bin -fillh mask
+    fslmaths mask_pet -bin -fillh mask_pet_reg_bin
+
+    fslmaths mask_pet_reg_bin -kernel 2D -ero -bin -fillh mask
 
 
-(Revise this part) Now we can visualize the mask on top of the PET data. The blue semitransparent layer is the mask.
+Now we can visualize the mask on top of the PET data. The blue semitransparent layer is the mask.
 
 .. image:: /images/pet_pre_processing/mask.png
 
