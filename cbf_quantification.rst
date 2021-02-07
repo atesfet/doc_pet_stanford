@@ -4,47 +4,56 @@ CBF Quantification
 Introduction
 ----------------
 
-The goal of this section is to compute voxel-wise CBF using the data that we have pre-processed in previous steps. We will also tranform the quantified CBF image from ASL space to standard MNI-152 2mm space for group analysis.
+The goal of this section is to compute voxel-wise CBF using the data that we have pre-processed in previous steps. We will also tranform the quantified CBF image from PET space to standard MNI-152 2mm space for group analysis.
 
 
 CBF Quantification
 ------------------
 
-We are going to use the `oxford_asl <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/oxford_asl>`_ tool to quantify CBF from our the mean ASL label/control difference data. Here, we need to specify our acquisition parameters:
+We are going to use the `fabber <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FABBER>`_ tool to quantify CBF from our dynamic PET data. The process includes 2 steps: (1), we estimate the voxel-wise CBF using Bayesian inference; (2) we apply spatial regularization to improve the CBF quantification.
 
-Inversion time (--tis): 3.475 the summation of labeling duration and post-labeling delay
+Step 1: CBF quantification using Bayesian inference. In order to use `fabber <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FABBER>`_, we need to provide a list of options that specifies model and scanning parameters. An exmaple option file (fabber_options_PET_DYNAMIC_step_1.txt) has been provided for you. Below is the description of each of the options:
 
-Labeling duration (--bolus): 1.45;
+--model=pet_1TCM : Here we are using 1-compartment model
 
-Labeling duration is the same in all voxels (--fixbolus)
+--method=vb : Here we are using variational Bayesian inference
 
-Labeling technique is PCASL or CASL (--casl)
+--noise=white : Here we assume the noise of our data is in normal distribution
 
-T1 relaxation of tissue (--t1): 1.3;
+--data-order=singlefile : Here we are providing a single file to analyze
 
-T1 relaxation of arterial blood (--t1b): 1.65
+--aif=signal : Here we specify that the AIF of our dynamic PET is a list of signals
 
-Use spatial priors (--spatial)
+--aif-data=AIF.txt : Here we specify the file name of our AIF file
 
-Ignore arterial blood component (--artoff)
+--time-data=time.txt : Here we specify the file name that contains time of each signal
 
-The command is ::
+--allow-bad-voxels : Here we allow bad voxels to improve the robustness of our estimation
 
-    oxford_asl -i asl_diff_mean -o output_cbf -m mask --tis 3.475 --bolus 1.45 --fixbolus --casl --t1 1.3 --t1b 1.65 --spatial --artoff
+Now we can run the command to estimate voxel-wise CBF::
 
-The file output_cbf/native_space/perfusion.nii.gz is the estimated CBF image. We can have a look at it in FSLeyes
+    fabber_pet --data=DYNAMIC_4MM_FILTER --output=fabber_output_step1 -@ fabber_options_PET_DYNAMIC_step_1.txt
 
-.. image:: /images/cbf_quantification/cbf_relative.png
+The file fabber_output_step1/mean_K1.nii.gz is the estimated CBF image in relative units. We can have a look at it in FSLeyes
 
-Note that this is not the CBF image in absolute units (ml/100g/min), rather it is in arbitrary units. But it is important to check our results here. If everything works fine, we can move on to the calibration step.
+
+Step 2: Apply spatial regularization to improve CBF estimation. We will use the estimation results from Step 1 as the starting point to improve our CBF estimation by applying spatial regularization. Here, we will need a different option file (fabber_options_PET_DYNAMIC_step_2.txt) for the fabber command. The new options are:
+
+--method=spatialvb : Here we are using spatially variational Bayesian inference
+
+--continue-from-mvn=fabber_output_step1/finalMVN : Here we use the results from Step 1 to start the estimation in Step 2.
+
+Now we can run the command to apply spatial regularization::
+
+    fabber_pet --data=DYNAMIC_4MM_FILTER --output=fabber_output_step2 -@ fabber_options_PET_DYNAMIC_step_2.txt
 
 
 Calibration
 -----------
 
-The goal of calibration is to convert CBF from arbitrary units to the familiar ml/100g/min unit. Here, we need to use the M0a data that we derived before. We also need to consider the impact of labeling efficiency (in our case it is 85%) as well as the signal loss due to background suppression. Since we used 3 background suppression pulses, each with a efficiency of 91%, the effective signal should be 91% * 91% * 91% = 75%. Finally, we need to convert the unit from s-1 to ml/100g/min (a factor of 6000). Now let's incorporate all the information in our calibration command::
+After model-fitting using FABBER, the estimated CBF data is in s-1 unit. In general, we often use the unit of ml/100g/min. We can also apply a median filter to remove some of the inpulse noise. Therefore, we will convert the unit using the following command::
 
-    fslmaths output_cbf/native_space/perfusion -div M0a -div 0.85 -div 0.75 -mul 6000 -mas mask CBF_absolute
+	fslmaths fabber_output_step2/mean_K1 -mul 6000 -fmedian CBF_PET_DYNAMIC
 
 Now let's have a look at CBF_absolute file in FSLeyes. The value of each voxel should be in ml/100g/min unit.
 
@@ -56,10 +65,5 @@ Transform from ASL to MNI-152 2mm Space
 
 Finally, we can transform the absolute CBF image to MNI-152 2mm standard space using linear and non-linear registration::
 
-    applywarp --ref=${FSLDIR}/data/standard/MNI152_T1_2mm --in=CBF_absolute --warp=fsl_anat_dir.anat/T1_to_MNI_nonlin_field --premat=output_asl_reg/asl2struct.mat --out=CBF_absolute_standard
-
-
-
-
-
+    applywarp --ref=${FSLDIR}/data/standard/MNI152_T1_2mm --in=CBF_PET_DYNAMIC --warp=fsl_anat_dir.anat/T1_to_MNI_nonlin_field --premat=output_pet_reg/pet2struct.mat --out=CBF_absolute_standard
 
