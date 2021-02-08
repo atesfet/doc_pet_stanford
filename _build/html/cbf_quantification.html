@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBF Quantification &#8212; Documentation for Stanford Dynamic PET Data Processing  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Data Preparation" href="aif_quantification.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="cbf-quantification">
+<h1>CBF Quantification<a class="headerlink" href="#cbf-quantification" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The goal of this section is to compute voxel-wise CBF using the data that we have pre-processed in previous steps. We will also tranform the quantified CBF image from PET space to standard MNI-152 2mm space for group analysis.</p>
+</div>
+<div class="section" id="id1">
+<h2>CBF Quantification<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>We are going to use the <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FABBER">fabber</a> tool to quantify CBF from our dynamic PET data. The process includes 2 steps: (1), we estimate the voxel-wise CBF using Bayesian inference; (2) we apply spatial regularization to improve the CBF quantification.</p>
+<p>Step 1: CBF quantification using Bayesian inference. In order to use <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FABBER">fabber</a>, we need to provide a list of options that specifies model and scanning parameters. An exmaple option file (fabber_options_PET_DYNAMIC_step_1.txt) has been provided for you. Below is the description of each of the options:</p>
+<p>–model=pet_1TCM : Here we are using 1-compartment model</p>
+<p>–method=vb : Here we are using variational Bayesian inference</p>
+<p>–noise=white : Here we assume the noise of our data is in normal distribution</p>
+<p>–data-order=singlefile : Here we are providing a single file to analyze</p>
+<p>–aif=signal : Here we specify that the AIF of our dynamic PET is a list of signals</p>
+<p>–aif-data=AIF.txt : Here we specify the file name of our AIF file</p>
+<p>–time-data=time.txt : Here we specify the file name that contains time of each signal</p>
+<p>–allow-bad-voxels : Here we allow bad voxels to improve the robustness of our estimation</p>
+<p>Now we can run the command to estimate voxel-wise CBF:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fabber_pet</span> <span class="o">--</span><span class="n">data</span><span class="o">=</span><span class="n">DYNAMIC_4MM_FILTER</span> <span class="o">--</span><span class="n">output</span><span class="o">=</span><span class="n">fabber_output_step1</span> <span class="o">-@</span> <span class="n">fabber_options_PET_DYNAMIC_step_1</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>The file fabber_output_step1/mean_K1.nii.gz is the estimated CBF image in relative units. We can have a look at it in FSLeyes</p>
+<p>Step 2: Apply spatial regularization to improve CBF estimation. We will use the estimation results from Step 1 as the starting point to improve our CBF estimation by applying spatial regularization. Here, we will need a different option file (fabber_options_PET_DYNAMIC_step_2.txt) for the fabber command. The new options are:</p>
+<p>–method=spatialvb : Here we are using spatially variational Bayesian inference</p>
+<p>–continue-from-mvn=fabber_output_step1/finalMVN : Here we use the results from Step 1 to start the estimation in Step 2.</p>
+<p>Now we can run the command to apply spatial regularization:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fabber_pet</span> <span class="o">--</span><span class="n">data</span><span class="o">=</span><span class="n">DYNAMIC_4MM_FILTER</span> <span class="o">--</span><span class="n">output</span><span class="o">=</span><span class="n">fabber_output_step2</span> <span class="o">-@</span> <span class="n">fabber_options_PET_DYNAMIC_step_2</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="calibration">
+<h2>Calibration<a class="headerlink" href="#calibration" title="Permalink to this headline">¶</a></h2>
+<p>After model-fitting using FABBER, the estimated CBF data is in s-1 unit. In general, we often use the unit of ml/100g/min. We can also apply a median filter to remove some of the inpulse noise. Therefore, we will convert the unit using the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fslmaths</span> <span class="n">fabber_output_step2</span><span class="o">/</span><span class="n">mean_K1</span> <span class="o">-</span><span class="n">mul</span> <span class="mi">6000</span> <span class="o">-</span><span class="n">fmedian</span> <span class="n">CBF_PET_DYNAMIC</span>
+</pre></div>
+</div>
+<p>Now let’s have a look at CBF_absolute file in FSLeyes. The value of each voxel should be in ml/100g/min unit.</p>
+<img alt="_images/cbf_absolute.png" src="_images/cbf_absolute.png" />
+</div>
+<div class="section" id="transform-from-asl-to-mni-152-2mm-space">
+<h2>Transform from ASL to MNI-152 2mm Space<a class="headerlink" href="#transform-from-asl-to-mni-152-2mm-space" title="Permalink to this headline">¶</a></h2>
+<p>Finally, we can transform the absolute CBF image to MNI-152 2mm standard space using linear and non-linear registration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>applywarp --ref=${FSLDIR}/data/standard/MNI152_T1_2mm --in=CBF_PET_DYNAMIC --warp=fsl_anat_dir.anat/T1_to_MNI_nonlin_field --premat=output_pet_reg/pet2struct.mat --out=CBF_absolute_standard
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Documentation for Stanford Dynamic PET Data Processing</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="dynamic_pet_data_reconstruction.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_preparation.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structural_image_processing.html">Structural Image Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pet_pre_processing.html">Dynamic PET Data Pre-processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aif_quantification.html">Data Preparation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CBF Quantification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">CBF Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calibration">Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transform-from-asl-to-mni-152-2mm-space">Transform from ASL to MNI-152 2mm Space</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="aif_quantification.html" title="previous chapter">Data Preparation</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Stanford University.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/cbf_quantification.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

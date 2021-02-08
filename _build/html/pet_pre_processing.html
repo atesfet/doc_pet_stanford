@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic PET Data Pre-processing &#8212; Documentation for Stanford Dynamic PET Data Processing  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Data Preparation" href="aif_quantification.html" />
+    <link rel="prev" title="Structural Image Processing" href="structural_image_processing.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="dynamic-pet-data-pre-processing">
+<h1>Dynamic PET Data Pre-processing<a class="headerlink" href="#dynamic-pet-data-pre-processing" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Our dynamic PET data contains signal count at different time points, sufficient for quantifying CBF in absolute units (ml/100g/min). Before we perform quantification, we need to pre-process the data to:</p>
+<p>1 create a registration between the T1-weighted structural and PET space</p>
+<p>2 create an analysis mask in PET space</p>
+</div>
+<div class="section" id="registration-between-t1-weighted-structural-and-pet-space">
+<h2>Registration between T1-weighted Structural and PET Space<a class="headerlink" href="#registration-between-t1-weighted-structural-and-pet-space" title="Permalink to this headline">¶</a></h2>
+<p>We use the <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils">fslmaths</a> command to create a mean PET signal count across all time points:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fslmaths</span> <span class="n">DYNAMIC_PET_FILTER_4MM</span> <span class="o">-</span><span class="n">Tmean</span> <span class="n">DYNAMIC_PET_FILTER_4MM_mean</span>
+</pre></div>
+</div>
+<p>We use the <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FLIRT">bet</a> command to extract the brain of our PET data to initiate registration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bet</span> <span class="n">DYNAMIC_PET_FILTER_4MM_mean</span> <span class="n">PET_bet</span>
+</pre></div>
+</div>
+<p>We create a new directory to save the registration results:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">output_pet_reg</span>
+</pre></div>
+</div>
+<p>We use the <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FLIRT">flirt</a> command to perform registration between T1-weighted Structural and PET Space:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flirt</span> <span class="o">-</span><span class="n">cost</span> <span class="n">mutualinfo</span> <span class="o">-</span><span class="ow">in</span> <span class="n">PET_bet</span> <span class="o">-</span><span class="n">ref</span> <span class="n">fsl_anat_dir</span><span class="o">.</span><span class="n">anat</span><span class="o">/</span><span class="n">T1_biascorr</span> <span class="o">-</span><span class="n">omat</span> <span class="n">output_pet_reg</span><span class="o">/</span><span class="n">pet2struct</span><span class="o">.</span><span class="n">mat</span> <span class="o">-</span><span class="n">out</span> <span class="n">output_pet_reg</span><span class="o">/</span><span class="n">pet2struct</span>
+</pre></div>
+</div>
+<p>The registration results are saved in output_pet_reg folder.</p>
+</div>
+<div class="section" id="create-an-analysis-mask-in-pet-space">
+<h2>Create an analysis mask in PET space<a class="headerlink" href="#create-an-analysis-mask-in-pet-space" title="Permalink to this headline">¶</a></h2>
+<p>Once we have created the registration between the PET and T1-weighted structural image, we are going to use the brain mask in the structural image space to create an analysis mask in the PET space.</p>
+<p>First, we use the <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FLIRT">convert_xfm</a> command to create a transformation from T1-weighted structural to PET space:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">convert_xfm</span> <span class="o">-</span><span class="n">omat</span> <span class="n">output_pet_reg</span><span class="o">/</span><span class="n">struct2pet</span><span class="o">.</span><span class="n">mat</span> <span class="o">-</span><span class="n">inverse</span> <span class="n">output_pet_reg</span><span class="o">/</span><span class="n">pet2struct</span><span class="o">.</span><span class="n">mat</span>
+</pre></div>
+</div>
+<p>Now we can use transform the T1-weighted brain image to the PET space:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flirt</span> <span class="o">-</span><span class="ow">in</span> <span class="n">fsl_anat_dir</span><span class="o">.</span><span class="n">anat</span><span class="o">/</span><span class="n">T1_biascorr_brain</span> <span class="o">-</span><span class="n">ref</span> <span class="n">PET_bet</span> <span class="o">-</span><span class="n">applyxfm</span> <span class="o">-</span><span class="n">init</span> <span class="n">output_pet_reg</span><span class="o">/</span><span class="n">struct2pet</span><span class="o">.</span><span class="n">mat</span> <span class="o">-</span><span class="n">out</span> <span class="n">mask_pet</span> <span class="o">-</span><span class="n">interp</span> <span class="n">trilinear</span> <span class="o">-</span><span class="n">paddingsize</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>We also slighly erode the mask the cover most of the brain regions in the PET space:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fslmaths</span> <span class="n">mask_pet</span> <span class="o">-</span><span class="nb">bin</span> <span class="o">-</span><span class="n">fillh</span> <span class="n">mask_pet_reg_bin</span>
+
+<span class="n">fslmaths</span> <span class="n">mask_pet_reg_bin</span> <span class="o">-</span><span class="n">kernel</span> <span class="mi">2</span><span class="n">D</span> <span class="o">-</span><span class="n">ero</span> <span class="o">-</span><span class="nb">bin</span> <span class="o">-</span><span class="n">fillh</span> <span class="n">mask</span>
+</pre></div>
+</div>
+<p>Now we can visualize the mask on top of the PET data. The blue semitransparent layer is the mask.</p>
+<img alt="_images/mask.png" src="_images/mask.png" />
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Documentation for Stanford Dynamic PET Data Processing</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="dynamic_pet_data_reconstruction.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_preparation.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structural_image_processing.html">Structural Image Processing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Dynamic PET Data Pre-processing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#registration-between-t1-weighted-structural-and-pet-space">Registration between T1-weighted Structural and PET Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-an-analysis-mask-in-pet-space">Create an analysis mask in PET space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="aif_quantification.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cbf_quantification.html">CBF Quantification</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="structural_image_processing.html" title="previous chapter">Structural Image Processing</a></li>
+      <li>Next: <a href="aif_quantification.html" title="next chapter">Data Preparation</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Stanford University.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/pet_pre_processing.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Positron Emission Tomography (PET) Data Analysis Tutorial &#8212; Documentation for Stanford Dynamic PET Data Processing  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Data Preparation" href="dynamic_pet_data_reconstruction.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="dynamic-positron-emission-tomography-pet-data-analysis-tutorial">
+<h1>Dynamic Positron Emission Tomography (PET) Data Analysis Tutorial<a class="headerlink" href="#dynamic-positron-emission-tomography-pet-data-analysis-tutorial" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial aims to demonstrate how to obtain perfusion or cerebral blood flow (CBF) using dynamic O15-water PET data collected by GE 3T MRI (or PET/MRI) scanners at Stanford University. The same technique can be applied to dynamic PET data acquired using other tracers such as FDG.</p>
+<div class="section" id="pre-requisite">
+<h2>Pre-requisite<a class="headerlink" href="#pre-requisite" title="Permalink to this headline">¶</a></h2>
+<p>1 Download and install <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki">FSL</a></p>
+<p>2 Download and install <a class="reference external" href="https://github.com/rordenlab/dcm2niix">dcm2niix</a></p>
+<p>3 Understand the basics of <a class="reference external" href="http://mriquestions.com/what-is-asl.html">PET imaging</a></p>
+<p>4 Able to visualize PET neuroimaging data in NIfTI format</p>
+</div>
+<div class="section" id="sample-data">
+<h2>Sample Data<a class="headerlink" href="#sample-data" title="Permalink to this headline">¶</a></h2>
+<p>We will use a sample dataset of a healthy volunteer collected by a GE 3T MRI system. The dataset includes a T1 weighted structural image and an ASL image acquired using GE’s PET/MRI system. This dataset can be downloaded here.</p>
+</div>
+<div class="section" id="content">
+<h2>Content<a class="headerlink" href="#content" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dynamic_pet_data_reconstruction.html">Data Preparation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dynamic_pet_data_reconstruction.html#data-description">Data Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dynamic_pet_data_reconstruction.html#convert-from-dicom-to-nifti-format">Convert from DICOM to NifTI Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dynamic_pet_data_reconstruction.html#visualize-the-images">Visualize the Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dynamic_pet_data_reconstruction.html#potential-issues">Potential Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data_preparation.html">Data Preparation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data_preparation.html#data-description">Data Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_preparation.html#convert-from-dicom-to-nifti-format">Convert from DICOM to NifTI Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_preparation.html#visualize-the-images">Visualize the Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_preparation.html#potential-issues">Potential Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="structural_image_processing.html">Structural Image Processing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="structural_image_processing.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structural_image_processing.html#processing-the-t1-weighted-structural-image">Processing the T1-weighted Structural Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structural_image_processing.html#further-reading">Further Reading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pet_pre_processing.html">Dynamic PET Data Pre-processing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pet_pre_processing.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pet_pre_processing.html#registration-between-t1-weighted-structural-and-pet-space">Registration between T1-weighted Structural and PET Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pet_pre_processing.html#create-an-analysis-mask-in-pet-space">Create an analysis mask in PET space</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="aif_quantification.html">Data Preparation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="aif_quantification.html#data-description">Data Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aif_quantification.html#convert-from-dicom-to-nifti-format">Convert from DICOM to NifTI Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aif_quantification.html#visualize-the-images">Visualize the Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aif_quantification.html#potential-issues">Potential Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cbf_quantification.html">CBF Quantification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cbf_quantification.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbf_quantification.html#id1">CBF Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbf_quantification.html#calibration">Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbf_quantification.html#transform-from-asl-to-mni-152-2mm-space">Transform from ASL to MNI-152 2mm Space</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="references">
+<h3>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
+<p>You may include the following description in your manuscript:</p>
+<p>An image-derived arterial input function (AIF) was estimated from dynamic PET data in the carotid arteries including corrections for spill-in and out artifacts using the high-resolution segmentation of the cervical MRA and GRE data for masking [1]. This AIF and dynamic PET data were then incorporated into the one-compartment pharmacokinetic model to quantify voxel-wise CBF. The model was implemented in the spatially regularized Variational Bayesian Inference framework in FSL [2].</p>
+<blockquote>
+<div><p>[1]    <em>Khalighi MM, Deller TW, Fan AP, et al. Image-derived input function estimation on a TOF-enabled PET/MR for cerebral blood flow mapping. Journal of Cerebral Blood Flow &amp; Metabolism. 2018;38(1):126-135. doi:10.1177/0271678X17691784</em></p>
+<p>[2]    <em>YOUR NEUROIMAGE REF GOES HERE</em></p>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">Documentation for Stanford Dynamic PET Data Processing</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dynamic_pet_data_reconstruction.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_preparation.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="structural_image_processing.html">Structural Image Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pet_pre_processing.html">Dynamic PET Data Pre-processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aif_quantification.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cbf_quantification.html">CBF Quantification</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="dynamic_pet_data_reconstruction.html" title="next chapter">Data Preparation</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Stanford University.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

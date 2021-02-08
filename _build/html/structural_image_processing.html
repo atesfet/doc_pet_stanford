@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structural Image Processing &#8212; Documentation for Stanford Dynamic PET Data Processing  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Dynamic PET Data Pre-processing" href="pet_pre_processing.html" />
+    <link rel="prev" title="Data Preparation" href="data_preparation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="structural-image-processing">
+<h1>Structural Image Processing<a class="headerlink" href="#structural-image-processing" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The T1-weighted image allows us to perform registration and group analysis for our PET data. However, the raw T1-weighted image from the scanner may contain artifacts due to bias field. We can use FSL tools to reduce these impacts and improve the accuracy of image registration and tissue segmentation.</p>
+</div>
+<div class="section" id="processing-the-t1-weighted-structural-image">
+<h2>Processing the T1-weighted Structural Image<a class="headerlink" href="#processing-the-t1-weighted-structural-image" title="Permalink to this headline">¶</a></h2>
+<p>We use the <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/fsl_anat">fsl_anat</a> to improve the quality of the T1-weighted structural image. The procedure includes: automated cropping, bias field correction, brain extraction, linear and non-linear registration, tissue segmentation:</p>
+<p>For the T1-weighted structural image:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fsl_anat</span> <span class="o">-</span><span class="n">i</span> <span class="n">T1</span> <span class="o">-</span><span class="n">o</span> <span class="n">fsl_anat_dir</span> <span class="o">--</span><span class="n">nosubcortseg</span>
+</pre></div>
+</div>
+<p>The process may take a while to finish. The results are saved in the fsl_anat_dir.anat folder.</p>
+</div>
+<div class="section" id="further-reading">
+<h2>Further Reading<a class="headerlink" href="#further-reading" title="Permalink to this headline">¶</a></h2>
+<p>The detail explanation on structural image processing can be found in the <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fslcourse/">FSL Course</a>.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Documentation for Stanford Dynamic PET Data Processing</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="dynamic_pet_data_reconstruction.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_preparation.html">Data Preparation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Structural Image Processing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#processing-the-t1-weighted-structural-image">Processing the T1-weighted Structural Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#further-reading">Further Reading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pet_pre_processing.html">Dynamic PET Data Pre-processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aif_quantification.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cbf_quantification.html">CBF Quantification</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="data_preparation.html" title="previous chapter">Data Preparation</a></li>
+      <li>Next: <a href="pet_pre_processing.html" title="next chapter">Dynamic PET Data Pre-processing</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Stanford University.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/structural_image_processing.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
