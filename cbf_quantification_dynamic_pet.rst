@@ -1,10 +1,10 @@
-CBF Quantification
-==================
+CBF Quantification Using Dynamic PET 
+====================================
 
 Introduction
 ----------------
 
-The goal of this section is to compute voxel-wise CBF using the data that we have pre-processed in previous steps. We will also tranform the quantified CBF image from PET space to standard MNI-152 2mm space for group analysis.
+The goal of this section is to compute voxel-wise CBF using the Dynamic PET data that we have pre-processed in previous steps. We will also tranform the quantified CBF image from PET space to standard MNI-152 2mm space for group analysis.
 
 
 CBF Quantification
