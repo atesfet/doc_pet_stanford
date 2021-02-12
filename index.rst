@@ -11,15 +11,17 @@ Pre-requisite
 
 2 Download and install `dcm2niix <https://github.com/rordenlab/dcm2niix>`_
 
-3 Understand the basics of `PET imaging <http://mriquestions.com/what-is-asl.html>`_
+3 Download and install `MATLAB <https://www.mathworks.com/?s_tid=gn_logo>`_
 
-4 Able to visualize PET neuroimaging data in NIfTI format
+4 Understand the basics of `PET imaging <https://www.radiologyinfo.org/en/info.cfm?pg=pet>`_
+
+5 Able to visualize PET neuroimaging data in NIfTI format
 
 
 Sample Data
 -----------
 
-We will use a sample dataset of a healthy volunteer collected by a GE 3T MRI system. The dataset includes a T1 weighted structural image and an ASL image acquired using GE's PET/MRI system. This dataset can be downloaded here.
+We will use a sample dataset of a healthy volunteer collected by a GE 3T PET/MRI system. The dataset includes a T1 weighted structural image and PET images acquired using GE's PET/MRI system. This dataset can be downloaded `here <https://github.com/mosszhaodphil/doc_pet_stanford/tree/master/data>`_.
 
 
 Content
