@@ -34,17 +34,18 @@
             
   <div class="section" id="dynamic-positron-emission-tomography-pet-data-analysis-tutorial">
 <h1>Dynamic Positron Emission Tomography (PET) Data Analysis Tutorial<a class="headerlink" href="#dynamic-positron-emission-tomography-pet-data-analysis-tutorial" title="Permalink to this headline">¶</a></h1>
-<p>This tutorial aims to demonstrate how to obtain perfusion or cerebral blood flow (CBF) using dynamic O15-water PET data collected by GE 3T MRI (or PET/MRI) scanners at Stanford University. The same technique can be applied to dynamic PET data acquired using other tracers such as FDG.</p>
+<p>This tutorial aims to demonstrate how to obtain perfusion or cerebral blood flow (CBF) using dynamic O15-water PET data collected by GE’s PET (or PET/MRI) scanners at Stanford University. The same technique can be applied to dynamic PET data acquired using other tracers such as FDG.</p>
 <div class="section" id="pre-requisite">
 <h2>Pre-requisite<a class="headerlink" href="#pre-requisite" title="Permalink to this headline">¶</a></h2>
 <p>1 Download and install <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki">FSL</a></p>
 <p>2 Download and install <a class="reference external" href="https://github.com/rordenlab/dcm2niix">dcm2niix</a></p>
-<p>3 Understand the basics of <a class="reference external" href="http://mriquestions.com/what-is-asl.html">PET imaging</a></p>
-<p>4 Able to visualize PET neuroimaging data in NIfTI format</p>
+<p>3 Download and install <a class="reference external" href="https://www.mathworks.com/?s_tid=gn_logo">MATLAB</a></p>
+<p>4 Understand the basics of <a class="reference external" href="https://www.radiologyinfo.org/en/info.cfm?pg=pet">PET imaging</a></p>
+<p>5 Able to visualize PET neuroimaging data in NIfTI format</p>
 </div>
 <div class="section" id="sample-data">
 <h2>Sample Data<a class="headerlink" href="#sample-data" title="Permalink to this headline">¶</a></h2>
-<p>We will use a sample dataset of a healthy volunteer collected by a GE 3T MRI system. The dataset includes a T1 weighted structural image and an ASL image acquired using GE’s PET/MRI system. This dataset can be downloaded here.</p>
+<p>We will use a sample dataset of a healthy volunteer collected by a GE 3T PET/MRI system. The dataset includes a T1 weighted structural image and PET images acquired using GE’s PET/MRI system. This dataset can be downloaded <a class="reference external" href="https://github.com/mosszhaodphil/doc_pet_stanford/tree/master/data">here</a>.</p>
 </div>
 <div class="section" id="content">
 <h2>Content<a class="headerlink" href="#content" title="Permalink to this headline">¶</a></h2>
