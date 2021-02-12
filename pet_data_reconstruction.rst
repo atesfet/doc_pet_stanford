@@ -17,6 +17,16 @@ Select the LST file and click on PETRecon/Replay.
 
 .. image:: /images/pet_recon/step_1/select_file.jpg
 
+Now we need to create a static dummy file of 5min to locate the exact timepoint at which the PET signal was detected.
+
+.. image:: /images/pet_recon/step_1/static_dummy_specification.jpg
+
+
+
+
+
+
+
 
 
 
