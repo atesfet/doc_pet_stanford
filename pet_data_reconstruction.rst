@@ -7,9 +7,6 @@ Introduction
 In this section, we are going to learn how to reconstruct PET data from PET sinogram. We are going to divide this section into XXX parts: (1) identify the starting point of PET signal; (2) create PET angiogram (PETA) data; (3) create static PET data; (4) create dynamic PET data without filters; (5) create dynamic PET data with spatial filters.
 
 
-
-
-
 Step 1: Identify The Starting Point of PET signal
 -------------------------------------------------
 
@@ -66,6 +63,30 @@ In the results, we can see that at time point 30 the PET signal becomes greater 
 We also see that at time point 59 the signal reaches the maximum. Since we need to create PETA profile, we need to obtain the increasing part of the PET signal. Typically it is from the start of the PET signal to the following 15-25 seconds. Here we will use 20 seconds for the PETA signal.
 
 .. image:: /images/pet_recon/step_1/c_shell_pet_count.jpg
+
+Now we have identified the actual starting time of the PET signal (at time point 90) and the duration of the PETA signal (20 seconds, but to be verified).
+
+
+Step 2: Create PETA
+-------------------
+
+We are going to a create PETA image to facilitate the estimation of AIF. Open a new PET recon window.
+
+.. image:: /images/pet_recon/step_2/select_file.jpg
+
+We create a PETA image that starts at time point 90 and for 20 seconds. Use 3 iterations of 4mm filter and 192 x 192 matrix and ZTE attenuation correction.
+
+.. image:: /images/pet_recon/step_2/peta_specification.jpg
+
+.. image:: /images/pet_recon/step_2/peta_options.jpg
+
+.. image:: /images/pet_recon/step_2/peta_recon_type.png
+
+.. image:: /images/pet_recon/step_2/peta_zte.png
+
+
+
+
 
 
 
