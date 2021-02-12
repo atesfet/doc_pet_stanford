@@ -26,10 +26,6 @@ After a while, the signal curve appears at the top right corner. In this case, i
 
 .. image:: /images/pet_recon/step_1/static_dummy_curve.jpg
 
-After a while, the signal curve appears at the top right corner. In this case, it seems that the signal starts after 60 seconds.
-
-.. image:: /images/pet_recon/step_1/static_dummy_curve.jpg
-
 Now we are going to create a dynamic dummy PET of 100 frames with a pre-delay of 1min (or 60 seconds as we found previously).
 
 Return to the file list and create a new recon window.
@@ -47,6 +43,8 @@ Return to the file list and create a new recon window.
 While we are waiting for the recon the finish, we could further narrow down the exact starting time of the PET signal.
 
 Select the dynamic dummy file.
+
+.. image:: /images/pet_recon/step_1/dynamic_dummy_select.jpg
 
 Open a C shell terminal and go to directory /usr/g/research/mehdi::
 
@@ -122,7 +120,11 @@ In the final step of PET data reconstruction, we will create a Dynamic PET data.
 
 We will create 2 Dynamic PET data: with and without filtering. For the data without filtering, we use these options: Pre-delay: 90 seconds; dynamic PET frames over ten minutes (30x1, 10x3, 12x5, 12x10, 12x30 s); filter: 0mm; number of iterations: 3; matrix: 192x192; Attenuation correction: ZTE.
 
+.. image:: /images/pet_recon/step_4/dynamic_no_filter_data.jpg
+
 .. image:: /images/pet_recon/step_4/dynamic_no_filter_timing.png
+
+.. image:: /images/pet_recon/step_4/dynamic_no_filter_options.jpg
 
 .. image:: /images/pet_recon/step_4/dynamic_no_filter_0mm.jpg
 
@@ -132,7 +134,9 @@ Once completed, we will create another Dynamic PET data with 4mm filter. Keep al
 
 .. image:: /images/pet_recon/step_4/dynamic_yes_filter_data.jpg
 
-.. image:: /images/pet_recon/step_4/dynamic_yes_filter_4mm.jpg
+.. image:: /images/pet_recon/step_4/dynamic_4mm_filter_options.jpg
+
+.. image:: /images/pet_recon/step_4/dynamic_yes_filter_4mm_filter.jpg
 
 
 It will take several hours to complete generating all the PET data that we have created. Please be patient. Once everything is finished, we should have 89 PETA data, 89 Static PET data, 6764 Dynamice PET data without filtering, and 6764 Dynamice PET data with filtering. To facilitate your studying of this tutorial, I have provided all the reconstructed data for you in the data foler. You can download the data from `here <https://github.com/mosszhaodphil/doc_pet_stanford/tree/master/data>`_.
