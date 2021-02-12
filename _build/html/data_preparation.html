@@ -16,7 +16,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Structural Image Processing" href="structural_image_processing.html" />
-    <link rel="prev" title="Data Preparation" href="dynamic_pet_data_reconstruction.html" />
+    <link rel="prev" title="PET Data Reconstructiion" href="pet_data_reconstruction.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -37,33 +37,13 @@
 <h1>Data Preparation<a class="headerlink" href="#data-preparation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="data-description">
 <h2>Data Description<a class="headerlink" href="#data-description" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference external" href="https://github.com/mosszhaodphil/doc_asl_stanford/tree/master/data">sample dataset</a> was acquired using a GE 3T MRI system. The dataset includes a T1 weighted structural image and an ASL image acquired using GE’s product sequence. These files were exported directly from the scanner.</p>
-<p>For the ASL data, the file contains the ASL label/control difference image and the proton density M0 image. The main acquisition parameters of our sample ASL data are:</p>
-<p>labeling duration: 1.45 seconds</p>
-<p>post-labeling delay: 2.025 seconds</p>
-<p>labeling efficiency: 85%</p>
-<p>Number of backgroun suppressions: 3</p>
-<p>Signal reduction due to background suppression: 9%</p>
-<p>Number of excitations (NEX): 3</p>
-<p>TR of M0 image: 2 seconds</p>
+<p>The <a class="reference external" href="https://github.com/mosszhaodphil/doc_pet_stanford/tree/master/data">sample dataset</a> was acquired using a GE PET/MRI system. The dataset includes a T1 weighted structural image and several PET images. These files were exported directly from the scanner after image reconstruction.</p>
 </div>
 <div class="section" id="convert-from-dicom-to-nifti-format">
 <h2>Convert from DICOM to NifTI Format<a class="headerlink" href="#convert-from-dicom-to-nifti-format" title="Permalink to this headline">¶</a></h2>
-<p>We use the <a class="reference external" href="https://github.com/rordenlab/dcm2niix">dcm2niix</a> software to convert the DICOM files to NIfTI format.</p>
-<p>For the T1-weighted structural image:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcm2niix</span> <span class="o">-</span><span class="n">o</span> <span class="o">./</span> <span class="o">-</span><span class="n">z</span> <span class="n">y</span> <span class="n">T1</span>
-</pre></div>
-</div>
-<p>For the ASL label/control difference image:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcm2niix</span> <span class="o">-</span><span class="n">o</span> <span class="o">./</span> <span class="o">-</span><span class="n">f</span> <span class="n">ASL_data</span> <span class="o">-</span><span class="n">z</span> <span class="n">y</span> <span class="n">ASL</span>
-</pre></div>
-</div>
-<p>Rename the ASL label/control difference image:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">immv</span> <span class="n">ASL_data</span> <span class="n">ASL_diff</span>
-</pre></div>
-</div>
-<p>Rename the proton density M0 image:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">immv</span> <span class="n">ASL_dataa</span> <span class="n">M0</span>
+<p>We use the <a class="reference external" href="https://github.com/rordenlab/dcm2niix">dcm2niix</a> software to convert the DICOM files to NIfTI format. We only need to process the Dynamic PET with 4mm-filter images.</p>
+<p>For the Dynamic PET with 4mm-filter image:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcm2niix</span> <span class="o">-</span><span class="n">o</span> <span class="o">./</span> <span class="o">-</span><span class="n">f</span> <span class="n">DYNAMIC_4MM_FILTER</span> <span class="o">-</span><span class="n">z</span> <span class="n">y</span> <span class="n">DYNAMIC_PET_YES_FILTER_4MM</span>
 </pre></div>
 </div>
 </div>
@@ -72,17 +52,8 @@
 <p>We use <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSLeyes">FSLeyes</a> to view the T1-wieghted structural and ASL images.</p>
 <p>We can view the T1-wieghted structural image, which should look like the following:</p>
 <img alt="_images/T1_structure.png" src="_images/T1_structure.png" />
-<p>The ASL label/control difference image should look like the following:</p>
-<img alt="_images/ASL_label_control.png" src="_images/ASL_label_control.png" />
-<p>The proton density M0 image should look like the following:</p>
-<img alt="_images/M0.png" src="_images/M0.png" />
-</div>
-<div class="section" id="potential-issues">
-<h2>Potential Issues<a class="headerlink" href="#potential-issues" title="Permalink to this headline">¶</a></h2>
-<p>It is possible that the the ASL label/control different and M0 images are store together in a single NifTI file. We may use the command tool <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils">fslroi</a> to separate the images.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fslroi</span> <span class="o">&lt;</span><span class="nb">input</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">tmin</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">tsize</span><span class="o">&gt;</span>
-</pre></div>
-</div>
+<p>For the Dynamic PET data, open the image and go to volume 30 and adjust the maximum display color to 1000000, it should look like the following:</p>
+<img alt="_images/Dynamic_PET.png" src="_images/Dynamic_PET.png" />
 </div>
 </div>
 
@@ -104,25 +75,24 @@
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="dynamic_pet_data_reconstruction.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pet_data_reconstruction.html">PET Data Reconstructiion</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Data Preparation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#data-description">Data Description</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#convert-from-dicom-to-nifti-format">Convert from DICOM to NifTI Format</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#visualize-the-images">Visualize the Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#potential-issues">Potential Issues</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="structural_image_processing.html">Structural Image Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pet_pre_processing.html">Dynamic PET Data Pre-processing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aif_quantification.html">Data Preparation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cbf_quantification.html">CBF Quantification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aif_quantification.html">PET Image Derived Arterial Input Function (AIF) Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cbf_quantification_dynamic_pet.html">CBF Quantification Using Dynamic PET</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="dynamic_pet_data_reconstruction.html" title="previous chapter">Data Preparation</a></li>
+      <li>Previous: <a href="pet_data_reconstruction.html" title="previous chapter">PET Data Reconstructiion</a></li>
       <li>Next: <a href="structural_image_processing.html" title="next chapter">Structural Image Processing</a></li>
   </ul></li>
 </ul>

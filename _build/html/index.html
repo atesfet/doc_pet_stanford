@@ -15,7 +15,7 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Data Preparation" href="dynamic_pet_data_reconstruction.html" />
+    <link rel="next" title="PET Data Reconstructiion" href="pet_data_reconstruction.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -50,18 +50,18 @@
 <h2>Content<a class="headerlink" href="#content" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="dynamic_pet_data_reconstruction.html">Data Preparation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="dynamic_pet_data_reconstruction.html#data-description">Data Description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dynamic_pet_data_reconstruction.html#convert-from-dicom-to-nifti-format">Convert from DICOM to NifTI Format</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dynamic_pet_data_reconstruction.html#visualize-the-images">Visualize the Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dynamic_pet_data_reconstruction.html#potential-issues">Potential Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pet_data_reconstruction.html">PET Data Reconstructiion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pet_data_reconstruction.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pet_data_reconstruction.html#step-1-identify-the-starting-point-of-pet-signal">Step 1: Identify The Starting Point of PET signal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pet_data_reconstruction.html#step-2-create-peta">Step 2: Create PETA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pet_data_reconstruction.html#step-3-static-pet-data-reconstruction">Step 3: Static PET Data Reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pet_data_reconstruction.html#step-4-dynamic-pet-data-reconstruction">Step 4: Dynamic PET Data Reconstruction</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="data_preparation.html">Data Preparation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="data_preparation.html#data-description">Data Description</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_preparation.html#convert-from-dicom-to-nifti-format">Convert from DICOM to NifTI Format</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_preparation.html#visualize-the-images">Visualize the Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data_preparation.html#potential-issues">Potential Issues</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="structural_image_processing.html">Structural Image Processing</a><ul>
@@ -76,18 +76,16 @@
 <li class="toctree-l2"><a class="reference internal" href="pet_pre_processing.html#create-an-analysis-mask-in-pet-space">Create an analysis mask in PET space</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="aif_quantification.html">Data Preparation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="aif_quantification.html#data-description">Data Description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="aif_quantification.html#convert-from-dicom-to-nifti-format">Convert from DICOM to NifTI Format</a></li>
-<li class="toctree-l2"><a class="reference internal" href="aif_quantification.html#visualize-the-images">Visualize the Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="aif_quantification.html#potential-issues">Potential Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aif_quantification.html">PET Image Derived Arterial Input Function (AIF) Estimation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="aif_quantification.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aif_quantification.html#estimate-aif">Estimate AIF</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="cbf_quantification.html">CBF Quantification</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cbf_quantification.html#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cbf_quantification.html#id1">CBF Quantification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cbf_quantification.html#calibration">Calibration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cbf_quantification.html#transform-from-asl-to-mni-152-2mm-space">Transform from ASL to MNI-152 2mm Space</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cbf_quantification_dynamic_pet.html">CBF Quantification Using Dynamic PET</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cbf_quantification_dynamic_pet.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbf_quantification_dynamic_pet.html#cbf-quantification">CBF Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbf_quantification_dynamic_pet.html#calibration">Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbf_quantification_dynamic_pet.html#transform-from-asl-to-mni-152-2mm-space">Transform from ASL to MNI-152 2mm Space</a></li>
 </ul>
 </li>
 </ul>
@@ -122,19 +120,19 @@
 
 <h3>Navigation</h3>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="dynamic_pet_data_reconstruction.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pet_data_reconstruction.html">PET Data Reconstructiion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_preparation.html">Data Preparation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structural_image_processing.html">Structural Image Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pet_pre_processing.html">Dynamic PET Data Pre-processing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aif_quantification.html">Data Preparation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cbf_quantification.html">CBF Quantification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aif_quantification.html">PET Image Derived Arterial Input Function (AIF) Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cbf_quantification_dynamic_pet.html">CBF Quantification Using Dynamic PET</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="dynamic_pet_data_reconstruction.html" title="next chapter">Data Preparation</a></li>
+      <li>Next: <a href="pet_data_reconstruction.html" title="next chapter">PET Data Reconstructiion</a></li>
   </ul></li>
 </ul>
 </div>

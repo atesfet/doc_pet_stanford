@@ -28,7 +28,7 @@ Content
 .. toctree::
    :maxdepth: 2
    
-   dynamic_pet_data_reconstruction
+   pet_data_reconstruction
 
    data_preparation
 
@@ -38,7 +38,7 @@ Content
 
    aif_quantification
 
-   cbf_quantification
+   cbf_quantification_dynamic_pet
 
 
 References

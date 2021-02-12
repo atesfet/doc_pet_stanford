@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Preparation &#8212; Documentation for Stanford Dynamic PET Data Processing  documentation</title>
+    <title>PET Image Derived Arterial Input Function (AIF) Estimation &#8212; Documentation for Stanford Dynamic PET Data Processing  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -15,7 +15,7 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="CBF Quantification" href="cbf_quantification.html" />
+    <link rel="next" title="CBF Quantification Using Dynamic PET" href="cbf_quantification_dynamic_pet.html" />
     <link rel="prev" title="Dynamic PET Data Pre-processing" href="pet_pre_processing.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -33,56 +33,22 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="data-preparation">
-<h1>Data Preparation<a class="headerlink" href="#data-preparation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="data-description">
-<h2>Data Description<a class="headerlink" href="#data-description" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference external" href="https://github.com/mosszhaodphil/doc_asl_stanford/tree/master/data">sample dataset</a> was acquired using a GE 3T MRI system. The dataset includes a T1 weighted structural image and an ASL image acquired using GE’s product sequence. These files were exported directly from the scanner.</p>
-<p>For the ASL data, the file contains the ASL label/control difference image and the proton density M0 image. The main acquisition parameters of our sample ASL data are:</p>
-<p>labeling duration: 1.45 seconds</p>
-<p>post-labeling delay: 2.025 seconds</p>
-<p>labeling efficiency: 85%</p>
-<p>Number of backgroun suppressions: 3</p>
-<p>Signal reduction due to background suppression: 9%</p>
-<p>Number of excitations (NEX): 3</p>
-<p>TR of M0 image: 2 seconds</p>
+  <div class="section" id="pet-image-derived-arterial-input-function-aif-estimation">
+<h1>PET Image Derived Arterial Input Function (AIF) Estimation<a class="headerlink" href="#pet-image-derived-arterial-input-function-aif-estimation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>In this section, we are going to create an image derived AIF for dynamic PET data analysis. We will need the following input files in DICOM format:</p>
+<p>1 Dynamic PET data without filtering</p>
+<p>2 PET angiogram (PETA)</p>
+<p>3 MRA of the neck (3D volume)</p>
+<p>4 Gradient echo (GRE) MRI data</p>
+<p>We will use the MATLAB script that you can downlaod <a class="reference external" href="https://github.com/mosszhaodphil/doc_pet_stanford/tree/master/src">here</a>.</p>
 </div>
-<div class="section" id="convert-from-dicom-to-nifti-format">
-<h2>Convert from DICOM to NifTI Format<a class="headerlink" href="#convert-from-dicom-to-nifti-format" title="Permalink to this headline">¶</a></h2>
-<p>We use the <a class="reference external" href="https://github.com/rordenlab/dcm2niix">dcm2niix</a> software to convert the DICOM files to NIfTI format.</p>
-<p>For the T1-weighted structural image:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcm2niix</span> <span class="o">-</span><span class="n">o</span> <span class="o">./</span> <span class="o">-</span><span class="n">z</span> <span class="n">y</span> <span class="n">T1</span>
-</pre></div>
-</div>
-<p>For the ASL label/control difference image:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dcm2niix</span> <span class="o">-</span><span class="n">o</span> <span class="o">./</span> <span class="o">-</span><span class="n">f</span> <span class="n">ASL_data</span> <span class="o">-</span><span class="n">z</span> <span class="n">y</span> <span class="n">ASL</span>
-</pre></div>
-</div>
-<p>Rename the ASL label/control difference image:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">immv</span> <span class="n">ASL_data</span> <span class="n">ASL_diff</span>
-</pre></div>
-</div>
-<p>Rename the proton density M0 image:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">immv</span> <span class="n">ASL_dataa</span> <span class="n">M0</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="visualize-the-images">
-<h2>Visualize the Images<a class="headerlink" href="#visualize-the-images" title="Permalink to this headline">¶</a></h2>
-<p>We use <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSLeyes">FSLeyes</a> to view the T1-wieghted structural and ASL images.</p>
-<p>We can view the T1-wieghted structural image, which should look like the following:</p>
-<img alt="_images/T1_structure.png" src="_images/T1_structure.png" />
-<p>The ASL label/control difference image should look like the following:</p>
-<img alt="_images/ASL_label_control.png" src="_images/ASL_label_control.png" />
-<p>The proton density M0 image should look like the following:</p>
-<img alt="_images/M0.png" src="_images/M0.png" />
-</div>
-<div class="section" id="potential-issues">
-<h2>Potential Issues<a class="headerlink" href="#potential-issues" title="Permalink to this headline">¶</a></h2>
-<p>It is possible that the the ASL label/control different and M0 images are store together in a single NifTI file. We may use the command tool <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils">fslroi</a> to separate the images.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fslroi</span> <span class="o">&lt;</span><span class="nb">input</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">output</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">tmin</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">tsize</span><span class="o">&gt;</span>
-</pre></div>
-</div>
+<div class="section" id="estimate-aif">
+<h2>Estimate AIF<a class="headerlink" href="#estimate-aif" title="Permalink to this headline">¶</a></h2>
+<p>Open the create_aif.m file and check the input files are correctly located. Run this command in your MATLAB terminal.</p>
+<p>It will take some time to finish the analysis. To facilitate your studying of this tutorial, I have provided the result AIF.txt for you.</p>
+<p>You will need the AIF.txt file to estimate CBF from the Dynamic PET data.</p>
 </div>
 </div>
 
@@ -104,18 +70,16 @@
 
 <h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="dynamic_pet_data_reconstruction.html">Data Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pet_data_reconstruction.html">PET Data Reconstructiion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_preparation.html">Data Preparation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="structural_image_processing.html">Structural Image Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pet_pre_processing.html">Dynamic PET Data Pre-processing</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Data Preparation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#data-description">Data Description</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#convert-from-dicom-to-nifti-format">Convert from DICOM to NifTI Format</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#visualize-the-images">Visualize the Images</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#potential-issues">Potential Issues</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">PET Image Derived Arterial Input Function (AIF) Estimation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#estimate-aif">Estimate AIF</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="cbf_quantification.html">CBF Quantification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cbf_quantification_dynamic_pet.html">CBF Quantification Using Dynamic PET</a></li>
 </ul>
 
 <div class="relations">
@@ -123,7 +87,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="pet_pre_processing.html" title="previous chapter">Dynamic PET Data Pre-processing</a></li>
-      <li>Next: <a href="cbf_quantification.html" title="next chapter">CBF Quantification</a></li>
+      <li>Next: <a href="cbf_quantification_dynamic_pet.html" title="next chapter">CBF Quantification Using Dynamic PET</a></li>
   </ul></li>
 </ul>
 </div>
