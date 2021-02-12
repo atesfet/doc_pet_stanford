@@ -28,7 +28,7 @@ Content
 .. toctree::
    :maxdepth: 2
    
-   dynamic_pet_data_reconstruction
+   pet_data_reconstruction
 
    data_preparation
 
