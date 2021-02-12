@@ -135,6 +135,6 @@ Once completed, we will create another Dynamic PET data with 4mm filter. Keep al
 .. image:: /images/pet_recon/step_4/dynamic_yes_filter_4mm.jpg
 
 
-It will take several hours to complete generating all the PET data that we have created. Please be patient. Once everything is finished, we should have 89 PETA data, 89 Static PET data, 6764 Dynamice PET data without filtering, and 6764 Dynamice PET data with filtering.
+It will take several hours to complete generating all the PET data that we have created. Please be patient. Once everything is finished, we should have 89 PETA data, 89 Static PET data, 6764 Dynamice PET data without filtering, and 6764 Dynamice PET data with filtering. To facilitate your studying of this tutorial, I have provided all the reconstructed data for you in the data foler. You can download the data from `here <https://github.com/mosszhaodphil/doc_pet_stanford/tree/master/data>`_.
 
 

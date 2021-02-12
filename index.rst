@@ -38,7 +38,7 @@ Content
 
    aif_quantification
 
-   cbf_quantification
+   cbf_quantification_dynamic_pet
 
 
 References
