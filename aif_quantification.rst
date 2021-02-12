@@ -14,7 +14,7 @@ In this section, we are going to create an image derived AIF for dynamic PET dat
 
 4 Gradient echo (GRE) MRI data
 
-We will use the MATLAB script that you can downlaod here.
+We will use the MATLAB script that you can downlaod `here <https://github.com/mosszhaodphil/doc_pet_stanford/tree/master/src>`_.
 
 
 Estimate AIF
