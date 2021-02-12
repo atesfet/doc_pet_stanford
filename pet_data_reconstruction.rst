@@ -45,7 +45,27 @@ Return to the file list and create a new recon window.
 
 .. image:: /images/pet_recon/step_1/dynamic_dummy_specification.jpg
 
+.. image:: /images/pet_recon/step_1/dynamic_dummy_100_frames.png
 
+While we are waiting for the recon the finish, we could further narrow down the exact starting time of the PET signal.
+
+Select the dynamic dummy file.
+
+Open a C shell terminal and go to directory /usr/g/research/mehdi::
+
+    cd usr/g/research/mehdi
+
+.. image:: /images/pet_recon/step_1/c_shell_mehdi.jpg
+
+Run the following command::
+
+    petCounts.sh.org | sort -n
+
+In the results, we can see that at time point 30 the PET signal becomes greater than zero. If you cannot see the entire results, just keep waiting for the recon to finish. It will take some time for each time point to process. Therefore, the actual timepoint of the start of PET signal is at 90 (pre-delay is 60 seconds plus the 30 seconds here). We will use this information in the subsequent steps.
+
+We also see that at time point 59 the signal reaches the maximum. Since we need to create PETA profile, we need to obtain the increasing part of the PET signal. Typically it is from the start of the PET signal to the following 15-25 seconds. Here we will use 20 seconds for the PETA signal.
+
+.. image:: /images/pet_recon/step_1/c_shell_pet_count.jpg
 
 
 
