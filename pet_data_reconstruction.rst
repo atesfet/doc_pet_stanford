@@ -80,16 +80,21 @@ We create a PETA image that starts at time point 90 and for 20 seconds. Use 3 it
 
 .. image:: /images/pet_recon/step_2/peta_options.jpg
 
+To select the desired PET recon type
+
 .. image:: /images/pet_recon/step_2/peta_recon_type.png
+
+To select the Recon Option
 
 .. image:: /images/pet_recon/step_2/peta_zte.png
 
+After the recon is complete. We can view the PETA image by selecting the PETA data and the localizer MRI data and click on ImageQC.
 
+.. image:: /images/pet_recon/step_2/peta_select.jpg
 
+The PETA data looks something like this. If you can see the blood (dark) signal in the arteries, it means that the PETA data is acceptable.
 
-
-
-
+.. image:: /images/pet_recon/step_2/peta_aif.jpg
 
 
 
