@@ -21,7 +21,29 @@ Now we need to create a static dummy file of 5min to locate the exact timepoint 
 
 .. image:: /images/pet_recon/step_1/static_dummy_specification.jpg
 
+Now click start recon button
 
+.. image:: /images/pet_recon/step_1/static_dummy_click_recon.jpg
+
+After a while, the signal curve appears at the top right corner. In this case, it seems that the signal starts after 60 seconds.
+
+.. image:: /images/pet_recon/step_1/static_dummy_curve.jpg
+
+After a while, the signal curve appears at the top right corner. In this case, it seems that the signal starts after 60 seconds.
+
+.. image:: /images/pet_recon/step_1/static_dummy_curve.jpg
+
+Now we are going to create a dynamic dummy PET of 100 frames with a pre-delay of 1min (or 60 seconds as we found previously).
+
+Return to the file list and create a new recon window.
+
+.. image:: /images/pet_recon/step_1/select_file.jpg
+
+Use the following settings to create a dynamic dummy PET data of 100 frames with a pre-delay of 60 seconds.
+
+Return to the file list and create a new recon window.
+
+.. image:: /images/pet_recon/step_1/dynamic_dummy_specification.jpg
 
 
 
