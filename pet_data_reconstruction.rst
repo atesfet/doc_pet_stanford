@@ -100,7 +100,7 @@ The PETA data looks something like this. If you can see the blood (dark) signal 
 Step 3: Static PET Data Reconstruction
 --------------------------------------
 
-After identifying the exact time point of the starting point of the PET signal, we are ready to create a Static PET data for analysis. Open a reconstruction window:
+After identifying the exact time point of the starting point of the PET signal, we are ready to create a Static PET data for analysis. Open a reconstruction window
 
 .. image:: /images/pet_recon/step_3/static_select.jpg
 
@@ -108,50 +108,33 @@ Since the half-life of our tracer (O15-water) is 2.04 minutes, we are going to c
 
 .. image:: /images/pet_recon/step_3/static_options.jpg
 
+.. image:: /images/pet_recon/step_3/static_filter.jpg
+
 .. image:: /images/pet_recon/step_3/static_type.jpg
 
 
+Step 4: Dynamic PET Data Reconstruction
+---------------------------------------
+
+In the final step of PET data reconstruction, we will create a Dynamic PET data. Again open a new Recon window
+
+.. image:: /images/pet_recon/step_4/dynamic_select.jpg
+
+We will create 2 Dynamic PET data: with and without filtering. For the data without filtering, we use these options: Pre-delay: 90 seconds; dynamic PET frames over ten minutes (30x1, 10x3, 12x5, 12x10, 12x30 s); filter: 0mm; number of iterations: 3; matrix: 192x192; Attenuation correction: ZTE.
+
+.. image:: /images/pet_recon/step_4/dynamic_no_filter_timing.png
+
+.. image:: /images/pet_recon/step_4/dynamic_no_filter_0mm.jpg
+
+Please be patient. This will take some time to finish.
+
+Once completed, we will create another Dynamic PET data with 4mm filter. Keep all the parameters the same with the previous Dynamic PET data without filtering but apply a 4mm spatial filter:
+
+.. image:: /images/pet_recon/step_4/dynamic_yes_filter_data.jpg
+
+.. image:: /images/pet_recon/step_4/dynamic_yes_filter_4mm.jpg
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Visualize the Images
---------------------
-
-We use `FSLeyes <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSLeyes>`_ to view the T1-wieghted structural and ASL images.
-
-We can view the T1-wieghted structural image, which should look like the following:
-
-.. image:: /images/data_preparation/T1_structure.png
-
-The ASL label/control difference image should look like the following:
-
-.. image:: /images/data_preparation/ASL_label_control.png
-
-The proton density M0 image should look like the following:
-
-.. image:: /images/data_preparation/M0.png
-
-
-Potential Issues
-----------------
-
-It is possible that the the ASL label/control different and M0 images are store together in a single NifTI file. We may use the command tool `fslroi <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils>`_ to separate the images. ::
-
-    fslroi <input> <output> <tmin> <tsize>
-
-
+It will take several hours to complete generating all the PET data that we have created. Please be patient. Once everything is finished, we should have 89 PETA data, 89 Static PET data, 6764 Dynamice PET data without filtering, and 6764 Dynamice PET data with filtering.
 
 
