@@ -102,13 +102,13 @@ Step 3: Static PET Data Reconstruction
 
 After identifying the exact time point of the starting point of the PET signal, we are ready to create a Static PET data for analysis. Open a reconstruction window:
 
-.. image:: /images/pet_recon/step_2/static_select.jpg
+.. image:: /images/pet_recon/step_3/static_select.jpg
 
 Since the half-life of our tracer (O15-water) is 2.04 minutes, we are going to create a Static PET data of 2 minutes to maximize the SNR. We will use the similar reconstruction options as in the PETA data. Pre-delay: 90 seconds; filter: 4mm; number of iterations: 4; matrix: 192x192; Attenuation correction: ZTE
 
-.. image:: /images/pet_recon/step_2/static_options.jpg
+.. image:: /images/pet_recon/step_3/static_options.jpg
 
-.. image:: /images/pet_recon/step_2/static_type.jpg
+.. image:: /images/pet_recon/step_3/static_type.jpg
 
 
 
