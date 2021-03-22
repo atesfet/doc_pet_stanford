@@ -41,6 +41,7 @@
 <div class="section" id="cbf-quantification">
 <h2>CBF Quantification<a class="headerlink" href="#cbf-quantification" title="Permalink to this headline">¶</a></h2>
 <p>We are going to use the <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FABBER">fabber</a> tool to quantify CBF from our dynamic PET data. The process includes 2 steps: (1), we estimate the voxel-wise CBF using Bayesian inference; (2) we apply spatial regularization to improve the CBF quantification.</p>
+<p>Important: please confirm that the the units of your PET data and AIF are consistent. In the example data, the unit of the PET data and AIF is Bq/mL.</p>
 <p>Step 1: CBF quantification using Bayesian inference. In order to use <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FABBER">fabber</a>, we need to provide a list of options that specifies model and scanning parameters. An exmaple option file (fabber_options_PET_DYNAMIC_step_1.txt) has been provided for you. Below is the description of each of the options:</p>
 <p>–model=pet_1TCM : Here we are using 1-compartment model</p>
 <p>–method=vb : Here we are using variational Bayesian inference</p>
