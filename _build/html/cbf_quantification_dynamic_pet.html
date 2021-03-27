@@ -43,6 +43,7 @@
 <p>We are going to use the <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FABBER">fabber</a> tool to quantify CBF from our dynamic PET data. The process includes 2 steps: (1), we estimate the voxel-wise CBF using Bayesian inference; (2) we apply spatial regularization to improve the CBF quantification.</p>
 <p>Important: please confirm that the the units of your PET data and AIF are consistent. In the example data, the unit of the PET data and AIF is Bq/mL.</p>
 <p>Step 1: CBF quantification using Bayesian inference. In order to use <a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FABBER">fabber</a>, we need to provide a list of options that specifies model and scanning parameters. An exmaple option file (fabber_options_PET_DYNAMIC_step_1.txt) has been provided for you. Below is the description of each of the options:</p>
+<p>–mask=mask : Brain mask used for analysis</p>
 <p>–model=pet_1TCM : Here we are using 1-compartment model</p>
 <p>–method=vb : Here we are using variational Bayesian inference</p>
 <p>–noise=white : Here we assume the noise of our data is in normal distribution</p>
@@ -64,10 +65,26 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="post-processing">
+<h2>Post-processing<a class="headerlink" href="#post-processing" title="Permalink to this headline">¶</a></h2>
+<p>After model-fitting using FABBER, there may be some artifacts with high signal intensity in or near the macrovasculatures. We can apply some post-processing techniques to reduce the impacts of these artifacts.</p>
+<p>First we remove these very high intensity voxels (higher than 99.9 percentile) and NAN voxels with zero:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fslmaths</span> <span class="n">fabber_output_step2</span><span class="o">/</span><span class="n">mean_K1</span> <span class="o">-</span><span class="n">nan</span> <span class="o">-</span><span class="n">uthrP</span> <span class="mf">99.9</span> <span class="n">fabber_output_step2</span><span class="o">/</span><span class="n">mean_K1_uthrP</span>
+</pre></div>
+</div>
+<p>Secontly, we apply extrapolation to restore these voxels:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">asl_file</span> <span class="o">--</span><span class="n">data</span><span class="o">=</span><span class="n">fabber_output_step2</span><span class="o">/</span><span class="n">mean_K1_uthrP</span> <span class="o">--</span><span class="n">ntis</span><span class="o">=</span><span class="mi">1</span> <span class="o">--</span><span class="n">mask</span><span class="o">=</span><span class="n">mask</span> <span class="o">--</span><span class="n">extrapolate</span> <span class="o">--</span><span class="n">out</span><span class="o">=</span><span class="n">fabber_output_step2</span><span class="o">/</span><span class="n">mean_K1_uthrP_extrapolate</span>
+</pre></div>
+</div>
+<p>Thirdly, we apply a median filter to remove the inpulse artifacts:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fslmaths</span> <span class="n">fabber_output_step2</span><span class="o">/</span><span class="n">mean_K1_uthrP_extrapolate</span> <span class="o">-</span><span class="n">fmedian</span> <span class="o">-</span><span class="n">mas</span> <span class="n">mask</span> <span class="n">fabber_output_step2</span><span class="o">/</span><span class="n">mean_K1_uthrP_extrapolate_median</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="calibration">
 <h2>Calibration<a class="headerlink" href="#calibration" title="Permalink to this headline">¶</a></h2>
-<p>After model-fitting using FABBER, the estimated CBF data is in s-1 unit. In general, we often use the unit of ml/100g/min. We can also apply a median filter to remove some of the inpulse noise. Therefore, we will convert the unit using the following command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fslmaths</span> <span class="n">fabber_output_step2</span><span class="o">/</span><span class="n">mean_K1</span> <span class="o">-</span><span class="n">mul</span> <span class="mi">6000</span> <span class="o">-</span><span class="n">fmedian</span> <span class="n">CBF_PET_DYNAMIC</span>
+<p>After post-processing, the estimated CBF data is still in s-1 unit. In general, we often use the unit of ml/100g/min. We can also convert the unit to ml/100g/min by multiplying 6000. Therefore, we will convert the unit using the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fslmaths</span> <span class="n">fabber_output_step2</span><span class="o">/</span><span class="n">mean_K1_uthrP_extrapolate_median</span> <span class="o">-</span><span class="n">mul</span> <span class="mi">6000</span> <span class="o">-</span><span class="n">mas</span> <span class="n">mask</span> <span class="n">CBF_PET_DYNAMIC</span>
 </pre></div>
 </div>
 <p>Now let’s have a look at CBF_absolute file in FSLeyes. The value of each voxel should be in ml/100g/min unit.</p>
@@ -108,6 +125,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">CBF Quantification Using Dynamic PET</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#cbf-quantification">CBF Quantification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#post-processing">Post-processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#calibration">Calibration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#transform-from-asl-to-mni-152-2mm-space">Transform from ASL to MNI-152 2mm Space</a></li>
 </ul>
